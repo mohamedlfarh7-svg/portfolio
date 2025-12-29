@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Mohamed El Farh</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+    <h1>EL-FARH</h1>
+    <div class="burger"><i class="fa fa-bars"></i></div>
+    <div id="menu">
+        <a href="#index" class="active">home</a>
+        <a href="#serveces">services</a>
+        <a href="#skills-intro">skills</a>
+        <a href="#contact-section">contact</a>
+    </div>
+</nav>
+
+<section id="index">
+    <img src="bg.jpg" alt="Mohamed">
+    <div id="home">
+        <h2 id="me">Hi, it's <span style="color:#b74b4b">Mohamed</span></h2>
+        <h2 id="mes">I'm a <span style="color:#b74b4b">developer full-stack</span></h2>
+        <p>I am a passionate full-stack developer dedicated to creating modern, responsive, and user-friendly digital experiences, combining clean design, efficient code, and innovative solutions to transform ideas into powerful real-world applications.</p>
+        <div class="icon">
+            <a href="https://www.instagram.com/el___farh48/?__pwa=1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://github.com/mohamedlfarh7-svg" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="mailto:mohamedlfarh7@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+        <button>Hire me</button>
+    </div>
+</section>
+
+<section id="serveces">
+    <h2>My Services</h2>
+    <p>I offer high-quality full-stack development services, creating modern and responsive web applications.</p>
+    <div id="cards">
+        <div class="card"><i class="fa-solid fa-code"></i><h3>Web Development</h3><p>Building responsive and interactive websites using HTML, CSS, JavaScript, and frameworks like React.</p></div>
+        <div class="card"><i class="fa-solid fa-server"></i><h3>Backend Development</h3><p>Designing APIs, managing databases, and server-side logic with Node.js, Express, and MongoDB.</p></div>
+        <div class="card"><i class="fa-solid fa-mobile-screen-button"></i><h3>Mobile Apps</h3><p>Creating cross-platform mobile applications using React Native and Flutter.</p></div>
+    </div>
+</section>
+
+<section class="skills-intro" id="skills-intro">
+    <h2>My Skills</h2>
+    <p>Here are the programming languages, tools, and technologies I use to build modern web and mobile applications.</p>
+    <div class="skill"><h3>HTML</h3><div class="bar"><div class="progress" style="--progress-width:95%;"><span>95%</span></div></div></div>
+    <div class="skill"><h3>CSS</h3><div class="bar"><div class="progress" style="--progress-width:90%;"><span>90%</span></div></div></div>
+    <div class="skill"><h3>JavaScript</h3><div class="bar"><div class="progress" style="--progress-width:85%;"><span>85%</span></div></div></div>
+</section>
+
+<section class="contact-section" id="contact-section">
+    <div class="contact-info">
+        <h2>Contact Info</h2>
+        <p><i class="fa-solid fa-envelope"></i> mohamedlfarh7@gmail.com</p>
+        <p><i class="fa-solid fa-phone"></i> +212 6 24 43 99 29</p>
+        <p><i class="fa-solid fa-location-dot"></i> Morocco</p>
+    </div>
+    <div class="contact-form">
+        <h2>Send Me a Message</h2>
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit" class="sub">Send</button>
+        </form>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <h3>EL-FARH</h3>
+        <p>Full-stack developer crafting modern and responsive digital experiences.</p>
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/el___farh48/?__pwa=1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://github.com/mohamedlfarh7-svg" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+        <p class="copy">© 2024 Mohamed EL-FARH. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+const burger = document.querySelector('.burger');
+const menu = document.querySelector('#menu');
+burger.addEventListener('click', () => {
+    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+});
+</script>
+</body>
+</html>
