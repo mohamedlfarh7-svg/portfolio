@@ -1,95 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio - Mohamed El Farh</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed El-farh | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0b0f1a; }
+        .neon-border { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 0 10px rgba(59, 130, 246, 0.2); }
+        .glass-card { background: rgba(17, 25, 40, 0.75); backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.1); }
+        @keyframes waveMove { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .animate-wave { display: flex; width: 200%; animation: waveMove 10s linear infinite; }
+    </style>
 </head>
-<body>
-<nav>
-    <h1>EL-FARH</h1>
-    <div class="burger"><i class="fa fa-bars"></i></div>
-    <div id="menu">
-        <a href="#index" class="active">home</a>
-        <a href="#serveces">services</a>
-        <a href="#skills-intro">skills</a>
-        <a href="#contact-section">contact</a>
-    </div>
-</nav>
+<body class="text-white font-sans overflow-x-hidden">
 
-<section id="index">
-    <img src="bg.jpg" alt="Mohamed">
-    <div id="home">
-        <h2 id="me">Hi, it's <span style="color:#b74b4b">Mohamed</span></h2>
-        <h2 id="mes">I'm a <span style="color:#b74b4b">developer full-stack</span></h2>
-        <p>I am a passionate full-stack developer dedicated to creating modern, responsive, and user-friendly digital experiences, combining clean design, efficient code, and innovative solutions to transform ideas into powerful real-world applications.</p>
-        <div class="icon">
-            <a href="https://www.instagram.com/el___farh48/?__pwa=1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://github.com/mohamedlfarh7-svg" target="_blank"><i class="fa-brands fa-github"></i></a>
-            <a href="https://linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="mailto:mohamedlfarh7@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+    <nav class="max-w-5xl mx-auto mt-6 px-6 sticky top-6 z-50">
+        <div class="glass-card rounded-2xl px-8 py-4 flex justify-between items-center shadow-2xl">
+            <div class="flex items-center space-x-3 text-xl font-black italic tracking-tighter">
+                MOHAMED<span class="text-cyan-400">.DEV</span>
+            </div>
+            <div class="hidden md:flex space-x-10 text-gray-300 font-medium">
+                <a href="#skills" class="hover:text-cyan-400 transition">Skills</a>
+                <a href="#projects" class="hover:text-cyan-400 transition">Projects</a>
+                <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+            </div>
         </div>
-        <button>Hire me</button>
-    </div>
-</section>
+    </nav>
 
-<section id="serveces">
-    <h2>My Services</h2>
-    <p>I offer high-quality full-stack development services, creating modern and responsive web applications.</p>
-    <div id="cards">
-        <div class="card"><i class="fa-solid fa-code"></i><h3>Web Development</h3><p>Building responsive and interactive websites using HTML, CSS, JavaScript, and frameworks like React.</p></div>
-        <div class="card"><i class="fa-solid fa-server"></i><h3>Backend Development</h3><p>Designing APIs, managing databases, and server-side logic with Node.js, Express, and MongoDB.</p></div>
-        <div class="card"><i class="fa-solid fa-mobile-screen-button"></i><h3>Mobile Apps</h3><p>Creating cross-platform mobile applications using React Native and Flutter.</p></div>
-    </div>
-</section>
-
-<section class="skills-intro" id="skills-intro">
-    <h2>My Skills</h2>
-    <p>Here are the programming languages, tools, and technologies I use to build modern web and mobile applications.</p>
-    <div class="skill"><h3>HTML</h3><div class="bar"><div class="progress" style="--progress-width:95%;"><span>95%</span></div></div></div>
-    <div class="skill"><h3>CSS</h3><div class="bar"><div class="progress" style="--progress-width:90%;"><span>90%</span></div></div></div>
-    <div class="skill"><h3>JavaScript</h3><div class="bar"><div class="progress" style="--progress-width:85%;"><span>85%</span></div></div></div>
-</section>
-
-<section class="contact-section" id="contact-section">
-    <div class="contact-info">
-        <h2>Contact Info</h2>
-        <p><i class="fa-solid fa-envelope"></i> mohamedlfarh7@gmail.com</p>
-        <p><i class="fa-solid fa-phone"></i> +212 6 24 43 99 29</p>
-        <p><i class="fa-solid fa-location-dot"></i> Morocco</p>
-    </div>
-    <div class="contact-form">
-        <h2>Send Me a Message</h2>
-        <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" required></textarea>
-            <button type="submit" class="sub">Send</button>
-        </form>
-    </div>
-</section>
-
-<footer>
-    <div class="footer-content">
-        <h3>EL-FARH</h3>
-        <p>Full-stack developer crafting modern and responsive digital experiences.</p>
-        <div class="footer-socials">
-            <a href="https://www.instagram.com/el___farh48/?__pwa=1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://github.com/mohamedlfarh7-svg" target="_blank"><i class="fa-brands fa-github"></i></a>
-            <a href="https://linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    <main class="max-w-6xl mx-auto px-6 pt-20 relative">
+        <div class="glass-card rounded-[3rem] p-10 md:p-20 flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
+            <div class="z-10 text-center md:text-left">
+                <h1 class="text-6xl md:text-8xl font-black leading-tight tracking-tighter italic">
+                    <span class="block">MOHAMED</span>
+                    <span class="block bg-gradient-to-r from-blue-300 to-purple-400 bg-clip-text text-transparent">EL-FARH</span>
+                </h1>
+                <p class="text-gray-400 text-xl mt-4 tracking-[0.2em] font-light">FULL-STACK DEVELOPER</p>
+                <div class="flex space-x-6 mt-10 justify-center md:justify-start">
+                    <a href="https://github.com/mohamedlfarh7-svg" class="w-12 h-12 rounded-full border border-cyan-500/50 flex items-center justify-center hover:bg-cyan-500/20 transition"><i class="fab fa-github text-xl text-cyan-400"></i></a>
+                    <a href="https://www.linkedin.com/in/mohamed-el-farh-749a71378/" class="w-12 h-12 rounded-full border border-cyan-500/50 flex items-center justify-center hover:bg-cyan-500/20 transition"><i class="fab fa-linkedin-in text-xl text-cyan-400"></i></a>
+                    <a href="#contact" class="w-12 h-12 rounded-full border border-cyan-500/50 flex items-center justify-center hover:bg-cyan-500/20 transition"><i class="far fa-envelope text-xl text-cyan-400"></i></a>
+                </div>
+            </div>
+            <div class="relative mt-16 md:mt-0">
+                <div class="w-64 h-64 md:w-80 md:h-80 rounded-full p-2 border-2 border-cyan-500/30 neon-border relative z-10 overflow-hidden">
+                    <img src="bg.jpg" alt="Profile" class="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition duration-500">
+                </div>
+                <div class="absolute -top-10 -right-10 w-full h-full bg-blue-600/10 blur-[100px] rounded-full"></div>
+            </div>
         </div>
-        <p class="copy">© 2024 Mohamed EL-FARH. All rights reserved.</p>
-    </div>
-</footer>
 
-<script>
-const burger = document.querySelector('.burger');
-const menu = document.querySelector('#menu');
-burger.addEventListener('click', () => {
-    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-});
-</script>
+        <div class="mt-20 overflow-hidden h-24">
+            <div class="animate-wave opacity-30">
+                <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-20 fill-none stroke-cyan-500 stroke-1"><path d="M0,60 C150,110 350,10 500,60 C650,110 850,10 1000,60 L1000,120 L0,120 Z"></path></svg>
+                <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-20 fill-none stroke-cyan-500 stroke-1"><path d="M0,60 C150,110 350,10 500,60 C650,110 850,10 1000,60 L1000,120 L0,120 Z"></path></svg>
+            </div>
+        </div>
+    </main>
+
+    <section id="skills" class="max-w-6xl mx-auto px-6 py-20">
+        <h2 class="text-4xl font-black mb-12 text-center italic tracking-tighter uppercase">Tech <span class="text-cyan-400">Stack</span></h2>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+            <div class="glass-card p-6 rounded-3xl text-center group hover:neon-border transition duration-500">
+                <i class="fab fa-html5 text-4xl text-orange-500 mb-4 group-hover:drop-shadow-[0_0_8px_#f97316]"></i>
+                <h3 class="font-bold text-sm">HTML5</h3>
+                <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden"><div class="bg-orange-500 h-full w-[95%]"></div></div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl text-center group hover:neon-border transition duration-500">
+                <i class="fab fa-css3-alt text-4xl text-blue-500 mb-4 group-hover:drop-shadow-[0_0_8px_#3b82f6]"></i>
+                <h3 class="font-bold text-sm">Tailwind</h3>
+                <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden"><div class="bg-blue-500 h-full w-[90%]"></div></div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl text-center group hover:neon-border transition duration-500">
+                <i class="fab fa-js text-4xl text-yellow-400 mb-4 group-hover:drop-shadow-[0_0_8px_#facd13]"></i>
+                <h3 class="font-bold text-sm">JavaScript</h3>
+                <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden"><div class="bg-yellow-400 h-full w-[85%]"></div></div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl text-center group hover:neon-border transition duration-500">
+                <i class="fab fa-php text-4xl text-indigo-400 mb-4 group-hover:drop-shadow-[0_0_8px_#818cf8]"></i>
+                <h3 class="font-bold text-sm">PHP 8.x</h3>
+                <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden"><div class="bg-indigo-400 h-full w-[80%]"></div></div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl text-center group hover:neon-border transition duration-500 border-t-2 border-red-500/30">
+                <i class="fab fa-laravel text-4xl text-red-500 mb-4 group-hover:drop-shadow-[0_0_8px_#ef4444]"></i>
+                <h3 class="font-bold text-sm">Laravel</h3>
+                <div class="w-full bg-gray-800 h-1 mt-4 rounded-full overflow-hidden"><div class="bg-red-500 h-full w-[88%]"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="max-w-6xl mx-auto px-6 py-20">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-4xl font-black italic tracking-tighter uppercase">Featured <span class="text-cyan-400">Projects</span></h2>
+                <p class="text-gray-500 mt-2">Some of my best work using PHP & Laravel.</p>
+            </div>
+            <a href="#" class="text-cyan-400 font-bold border-b border-cyan-400/30 hover:border-cyan-400 transition pb-1">View All GitHub</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="group glass-card rounded-[2rem] overflow-hidden relative">
+                <div class="h-56 bg-gradient-to-br from-indigo-900 to-slate-900 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] to-transparent"></div>
+                </div>
+                <div class="p-8 relative -mt-16 bg-gradient-to-t from-[#0b0f1a] to-transparent">
+                    <div class="flex gap-2 mb-4">
+                        <span class="px-3 py-1 bg-red-500/20 text-red-400 text-[10px] font-bold rounded-full border border-red-500/30">PHP</span>
+                        <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-[10px] font-bold rounded-full border border-blue-500/30">MYSQL</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">scrum_app</h3>
+                    <p class="text-gray-400 text-sm mb-6">Manage your sprints and tasks effectively</p>
+                    <div class="flex gap-4"><a href="https://github.com/mohamedlfarh7-svg/scrum_app" class="text-cyan-400 hover:text-white transition"><i class="fab fa-github text-xl"></i></a><a href="#" class="text-cyan-400 hover:text-white transition"><i class="fas fa-external-link-alt text-xl"></i></a></div>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-[2rem] overflow-hidden relative">
+                <div class="h-56 bg-gradient-to-br from-emerald-900 to-slate-900 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] to-transparent"></div>
+                </div>
+                <div class="p-8 relative -mt-16 bg-gradient-to-t from-[#0b0f1a] to-transparent">
+                    <div class="flex gap-2 mb-4">
+                        <span class="px-3 py-1 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold rounded-full border border-indigo-500/30">PHP 8.2</span>
+                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-[10px] font-bold rounded-full border border-yellow-500/30">MYSQL</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">Minerva_App</h3>
+                    <p class="text-gray-400 text-sm mb-6">Système de gestion éducatif connecté en temps réel.</p>
+                    <div class="flex gap-4"><a href="https://github.com/abdelhakimallouani/Minerva" class="text-cyan-400 hover:text-white transition"><i class="fab fa-github text-xl"></i></a><a href="#" class="text-cyan-400 hover:text-white transition"><i class="fas fa-external-link-alt text-xl"></i></a></div>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-[2rem] overflow-hidden relative">
+                <div class="h-56 bg-gradient-to-br from-purple-900 to-slate-900 relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1551288049-bbdac8a28516?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-50 group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] to-transparent"></div>
+                </div>
+                <div class="p-8 relative -mt-16 bg-gradient-to-t from-[#0b0f1a] to-transparent">
+                    <div class="flex gap-2 mb-4">
+                        <span class="px-3 py-1 bg-red-500/20 text-red-400 text-[10px] font-bold rounded-full border border-red-500/30">LARAVEL</span>
+                        <span class="px-3 py-1 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold rounded-full border border-cyan-500/30">TAILWIND</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">Contact_App</h3>
+                    <p class="text-gray-400 text-sm mb-6">Organisez vos relations professionnelles et personnelles.</p>
+                    <div class="flex gap-4"><a href="https://github.com/mohamedlfarh7-svg/contact_name" class="text-cyan-400 hover:text-white transition"><i class="fab fa-github text-xl"></i></a><a href="#" class="text-cyan-400 hover:text-white transition"><i class="fas fa-external-link-alt text-xl"></i></a></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="max-w-4xl mx-auto px-6 py-20 mb-20">
+        <div class="glass-card rounded-[3rem] p-10 md:p-16 border-t border-white/20">
+            <h2 class="text-4xl font-black mb-12 text-center italic uppercase tracking-tighter">Get in <span class="text-cyan-400">Touch</span></h2>
+            <form action="#" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-4">Full Name</label>
+                        <input type="text" placeholder="Mohamed..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-500 uppercase ml-4">Email Address</label>
+                        <input type="email" placeholder="mohamed@example.com" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl focus:outline-none focus:border-cyan-400 transition">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-gray-500 uppercase ml-4">Your Message</label>
+                    <textarea rows="4" placeholder="Tell me about your project..." class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl focus:outline-none focus:border-cyan-400 transition"></textarea>
+                </div>
+                <button class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 p-5 rounded-2xl font-black text-lg hover:shadow-[0_0_30px_rgba(34,211,238,0.4)] transition duration-500 uppercase tracking-widest">
+                    Send Message <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 py-12 text-center">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col items-center gap-4">
+            <h3 class="text-xl font-black italic">MOHAMED<span class="text-cyan-400">.DEV</span></h3>
+            <div class="flex space-x-6 text-gray-500">
+                <a href="#" class="hover:text-cyan-400 transition"><i class="fab fa-github"></i></a>
+                <a href="#" class="hover:text-cyan-400 transition"><i class="fab fa-linkedin"></i></a>
+            </div>
+            <p class="text-gray-600 text-[10px] uppercase tracking-[0.3em] mt-4">Built with Passion • 2026 • Mohamed EL-farh</p>
+        </div>
+    </footer>
+
 </body>
 </html>
