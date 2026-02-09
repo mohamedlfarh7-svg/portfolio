@@ -1,141 +1,177 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <title>Mohamed El Farh - Développeur Full-Stack</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohamed El Farh | Resume</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#151517',
+                        cardGray: '#1c1c1f',
+                        accentYellow: '#ffb400',
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #151517; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .skill-bar { transition: width 1.5s cubic-bezier(0.17, 0.55, 0.55, 1); }
+        .img-container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #ffb400;
+            mix-blend-mode: multiply;
+            opacity: 0.4;
+            transition: opacity 0.5s;
+        }
+        .img-container:hover::after { opacity: 0; }
+    </style>
 </head>
-<body class="bg-slate-100 font-sans antialiased text-gray-900">
+<body class="text-white antialiased p-4 md:p-12">
 
-<div class="max-w-5xl mx-auto my-12 bg-white shadow-2xl rounded-3xl overflow-hidden flex flex-col md:flex-row">
-
-    <div class="md:w-80 bg-slate-900 text-white p-8 flex flex-col">
+<div class="max-w-6xl mx-auto bg-darkBg border border-white/5 shadow-2xl overflow-hidden reveal">
+    
+    <div class="border-b border-white/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-10">
+        <div class="flex flex-col md:flex-row gap-8 items-center md:items-end w-full">
+            
+            <div class="relative w-40 h-48 md:w-56 md:h-64 bg-accentYellow overflow-hidden shadow-2xl img-container group flex-shrink-0">
+                <img src="profil.png" alt="Mohamed El Farh" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100">
+            </div>
+            
+            <div class="text-center md:text-left">
+                <p class="text-accentYellow text-[10px] uppercase tracking-[0.5em] font-black mb-4">// Curriculum Vitae</p>
+                <h1 class="text-6xl md:text-[100px] font-black leading-[0.8] tracking-tighter uppercase italic">
+                    Mohamed <br> <span class="text-accentYellow">El Farh.</span>
+                </h1>
+            </div>
+        </div>
         
-        <div class="text-center mb-10">
-            <div class="w-32 h-32 rounded-2xl border-2 border-blue-500 overflow-hidden mx-auto mb-4 rotate-3 hover:rotate-0 transition-transform duration-300 shadow-lg">
-                <img src="bg.jpg" alt="Mohamed El Farh" class="w-full h-full object-cover">
-            </div>
-            <h1 class="text-xl font-bold tracking-tight">Mohamed El Farh</h1>
-            <p class="text-blue-400 text-xs font-semibold uppercase tracking-widest mt-1">Développeur Junior</p>
-        </div>
-
-        <div class="mb-8">
-            <h2 class="text-xs font-black uppercase text-slate-500 mb-4 tracking-[0.2em] border-b border-slate-800 pb-2">Contact</h2>
-            <ul class="space-y-3 text-sm">
-                <li class="flex items-center gap-3"><i class="fas fa-envelope text-blue-400 w-4"></i> mohamedlfarh7@email.com</li>
-                <li class="flex items-center gap-3"><i class="fas fa-phone text-blue-400 w-4"></i> 06 24 43 99 29</li>
-                <li class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-blue-400 w-4"></i> Maroc</li>
-                <li class="flex items-center gap-3">
-                    <i class="fab fa-github text-blue-400 w-4"></i> 
-                    <a href="https://github.com/mohamedlfarh7-svg" class="hover:text-blue-400 transition-colors">https://github.com</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="mb-8">
-            <h2 class="text-xs font-black uppercase text-slate-500 mb-4 tracking-[0.2em] border-b border-slate-800 pb-2">Technique</h2>
-            <div class="flex flex-wrap gap-2">
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fab fa-html5"></i> HTML5 / CSS3
-                </span>
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fab fa-js"></i> JavaScript
-                </span>
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fab fa-php"></i> PHP 8
-                </span>
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fab fa-laravel"></i> Laravel
-                </span>
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fas fa-wind"></i> Tailwind CSS
-                </span>
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fas fa-database"></i> MySQL
-                </span>
-                <span class="text-[10px] bg-slate-800 text-blue-300 px-2 py-1 rounded border border-slate-700 flex items-center gap-1">
-                    <i class="fab fa-git-alt"></i> Git / GitHub
-                </span>
-            </div>
-        </div>
-
-        <div>
-            <h2 class="text-xs font-black uppercase text-slate-500 mb-4 tracking-[0.2em] border-b border-slate-800 pb-2">Langues</h2>
-            <div class="space-y-4">
-                <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Arabe</span><span class="text-blue-400 font-bold">100%</span></div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full"><div class="bg-blue-500 h-1.5 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 100%"></div></div>
-                </div>
-                <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Français</span><span class="text-blue-400 font-bold">35%</span></div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full"><div class="bg-blue-500 h-1.5 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 35%"></div></div>
-                </div>
-                <div>
-                    <div class="flex justify-between text-xs mb-1"><span>Anglais</span><span class="text-blue-400 font-bold">40%</span></div>
-                    <div class="w-full bg-slate-800 h-1.5 rounded-full"><div class="bg-blue-500 h-1.5 rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]" style="width: 40%"></div></div>
-                </div>
-            </div>
+        <div class="text-center md:text-right flex-shrink-0">
+            <p class="text-gray-500 text-[10px] font-black tracking-widest uppercase mb-1">Expertise</p>
+            <p class="text-2xl font-black italic uppercase text-white">Full-Stack <br>Developer</p>
         </div>
     </div>
 
-    <div class="flex-1 p-10 bg-white">
+    <div class="grid md:grid-cols-12">
         
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
-                <i class="fas fa-user-circle text-blue-600 text-xl"></i> Profil Professionnel
-            </h2>
-            <p class="text-gray-600 leading-relaxed border-l-4 border-blue-500 pl-4 bg-slate-50 py-3 rounded-r-lg">
-                Actuellement étudiant à <span class="text-blue-600 font-bold">YouCode</span>, je me forme intensivement aux métiers du web. Mon objectif est de concevoir des solutions numériques innovantes, robustes et centrées sur l'utilisateur.
-            </p>
-        </section>
+        <div class="md:col-span-4 border-r border-white/5 p-8 md:p-12 space-y-12 bg-white/[0.01]">
+            
+            <section>
+                <h2 class="text-accentYellow text-[10px] uppercase tracking-[0.4em] font-black mb-6 italic border-b border-white/5 pb-2">Contact Info</h2>
+                <ul class="space-y-4 text-sm font-medium text-gray-400">
+                    <li class="flex flex-col"><span class="text-[9px] uppercase text-gray-600 font-bold">Email</span> mohamedlfarh7@email.com</li>
+                    <li class="flex flex-col"><span class="text-[9px] uppercase text-gray-600 font-bold">Phone</span> 06 24 43 99 29</li>
+                    <li class="flex flex-col"><span class="text-[9px] uppercase text-gray-600 font-bold">Location</span> Maroc</li>
+                    <li class="flex flex-col pt-2">
+                        <span class="text-[9px] uppercase text-gray-600 font-bold mb-1">Social</span>
+                        <div class="flex gap-4">
+                            <a href="#" class="text-white hover:text-accentYellow transition">GH</a>
+                            <a href="#" class="text-white hover:text-accentYellow transition">LI</a>
+                        </div>
+                    </li>
+                </ul>
+            </section>
 
-        <section class="mb-12">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                <i class="fas fa-graduation-cap text-blue-600 text-xl"></i> Parcours Académique
-            </h2>
-            <div class="space-y-8 relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-100">
-                <div class="relative pl-10 group">
-                    <div class="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-blue-600 border-4 border-white shadow-sm transition-transform group-hover:scale-125"></div>
-                    <div class="flex justify-between items-baseline flex-wrap gap-2">
-                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors">YouCode – Développement Web Full-Stack</h3>
-                        <span class="text-xs font-bold px-2 py-1 bg-slate-100 text-slate-500 rounded-md">2025 — 2027</span>
+            <section>
+                <h2 class="text-accentYellow text-[10px] uppercase tracking-[0.4em] font-black mb-6 italic border-b border-white/5 pb-2">Technical Stack</h2>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-cardGray border border-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-gray-300">Laravel</span>
+                    <span class="bg-cardGray border border-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-gray-300">PHP 8</span>
+                    <span class="bg-cardGray border border-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-gray-300">MySQL</span>
+                    <span class="bg-cardGray border border-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-gray-300">Tailwind</span>
+                    <span class="bg-cardGray border border-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-gray-300">JavaScript</span>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-accentYellow text-[10px] uppercase tracking-[0.4em] font-black mb-6 italic border-b border-white/5 pb-2">Langues</h2>
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-black mb-2"><span>Arabe</span><span>100%</span></div>
+                        <div class="w-full bg-white/5 h-1"><div class="bg-accentYellow h-full skill-bar" style="width: 100%"></div></div>
                     </div>
-                    <p class="text-gray-600 mt-2 text-sm leading-relaxed text-justify">Formation intensive en mode projet : Architecture MVC, développement d'API REST, gestion de bases de données et workflow Git avancé.</p>
-                </div>
-                <div class="relative pl-10 group">
-                    <div class="absolute left-1.5 top-1.5 w-3.5 h-3.5 rounded-full bg-slate-300 border-4 border-white shadow-sm transition-transform group-hover:scale-125 group-hover:bg-blue-400"></div>
-                    <div class="flex justify-between items-baseline">
-                        <h3 class="text-lg font-bold text-slate-800">Baccalauréat Scientifique</h3>
-                        <span class="text-xs font-bold px-2 py-1 bg-slate-100 text-slate-500 rounded-md">2025</span>
+                    <div>
+                        <div class="flex justify-between text-[10px] uppercase font-black mb-2"><span>Français</span><span>35%</span></div>
+                        <div class="w-full bg-white/5 h-1"><div class="bg-accentYellow h-full skill-bar" style="width: 35%"></div></div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        <section>
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                <i class="fas fa-laptop-code text-blue-600 text-xl"></i> Réalisations Clés
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="group p-5 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">01</div>
-                    <h4 class="font-bold text-slate-800 mb-2">Application Laravel</h4>
-                    <p class="text-xs text-gray-500 leading-relaxed uppercase font-semibold mb-2">Backend & Database</p>
-                    <p class="text-sm text-gray-600">Système de gestion d'inventaire complet avec CRUD, authentification sécurisée et relations MySQL complexes.</p>
-                </div>
-                <div class="group p-5 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-blue-600 font-bold group-hover:bg-blue-600 group-hover:text-white transition-colors">02</div>
-                    <h4 class="font-bold text-slate-800 mb-2">Portfolio Interactif</h4>
-                    <p class="text-xs text-gray-500 leading-relaxed uppercase font-semibold mb-2">Frontend & UX/UI</p>
-                    <p class="text-sm text-gray-600">Design adaptatif réalisé avec Tailwind CSS, mettant l'accent sur la performance et l'accessibilité mobile.</p>
-                </div>
-            </div>
-        </section>
+        <div class="md:col-span-8 p-8 md:p-12 space-y-24">
+            
+            <section>
+                <h2 class="text-4xl font-black italic uppercase mb-8 inline-block border-b-4 border-accentYellow">Profil</h2>
+                <p class="text-gray-400 text-xl leading-relaxed font-medium italic">
+                    "Actuellement étudiant à <span class="text-white font-black uppercase">YouCode</span>, je me forme intensivement aux métiers du web. Mon objectif est de concevoir des solutions numériques <span class="text-accentYellow">innovantes</span>, robustes et centrées sur l'utilisateur."
+                </p>
+            </section>
 
+            <section>
+                <h2 class="text-4xl font-black italic uppercase mb-12">Formation</h2>
+                <div class="space-y-16">
+                    <div class="group relative pl-10 border-l-2 border-white/10 hover:border-accentYellow transition-colors">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 bg-accentYellow rounded-full shadow-[0_0_15px_#ffb400]"></div>
+                        <span class="text-[10px] font-black text-accentYellow uppercase tracking-widest">2025 — 2027</span>
+                        <h3 class="text-2xl font-black uppercase mt-2">YouCode – Développement Web Full-Stack</h3>
+                        <p class="text-gray-500 text-sm mt-3 leading-relaxed">Architecture MVC, API REST, gestion de bases de données et workflow Git avancé.</p>
+                    </div>
+                    <div class="group relative pl-10 border-l-2 border-white/10">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 bg-white/10 rounded-full"></div>
+                        <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest">2025</span>
+                        <h3 class="text-2xl font-black uppercase mt-2">Baccalauréat Scientifique</h3>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-4xl font-black italic uppercase mb-12">Projets Clés</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-cardGray p-10 border border-white/5 hover:border-accentYellow/40 transition-all group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-2 text-white/5 font-black text-6xl group-hover:text-accentYellow/10 transition-colors">01</div>
+                        <h4 class="text-xl font-black uppercase group-hover:text-accentYellow transition-colors italic">Laravel Inventory</h4>
+                        <p class="text-gray-500 text-xs mt-4 leading-relaxed font-bold uppercase tracking-tighter tracking-[0.1em]">Backend & Database</p>
+                        <p class="text-gray-400 text-sm mt-2">Système complet avec CRUD, authentification et relations MySQL complexes.</p>
+                    </div>
+                    <div class="bg-cardGray p-10 border border-white/5 hover:border-accentYellow/40 transition-all group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-2 text-white/5 font-black text-6xl group-hover:text-accentYellow/10 transition-colors">02</div>
+                        <h4 class="text-xl font-black uppercase group-hover:text-accentYellow transition-colors italic">Portfolio UX</h4>
+                        <p class="text-gray-500 text-xs mt-4 leading-relaxed font-bold uppercase tracking-[0.1em]">Frontend & Design</p>
+                        <p class="text-gray-400 text-sm mt-2">Interface réactive avec Tailwind CSS, focus sur la performance.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <div class="bg-accentYellow p-6 flex flex-col md:flex-row justify-between items-center px-12 gap-4">
+        <span class="text-black font-black text-[11px] uppercase tracking-[0.5em]">Mohamed El Farh • Portfolio 2026</span>
+        <div class="flex gap-4">
+            <div class="w-8 h-[2px] bg-black"></div>
+            <div class="w-8 h-[2px] bg-black"></div>
+            <div class="w-8 h-[2px] bg-black"></div>
+        </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.querySelector('.reveal').classList.add('active');
+        }, 100);
+    });
+</script>
 
 </body>
 </html>
