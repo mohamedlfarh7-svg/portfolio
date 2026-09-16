@@ -1,294 +1,1503 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mohamed El Farh | Junior Full Stack Web Developer</title>
+    <title>Mohamed El Farh | Full-Stack Developer</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#151517',
-                        cardGray: '#1c1c1f',
-                        accentYellow: '#ffb400',
+                        bgDark: '#0a0a0c',
+                        cardDark: '#121216',
+                        accentRed: '#ff2e2e',
+                        accentRedGlow: 'rgba(255, 46, 46, 0.4)',
+                        textGray: '#a1a1aa'
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
                 }
             }
         }
     </script>
+    
     <style>
-        body { background-color: #151517; overflow-x: hidden; }
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .project-image { transition: all 0.8s ease; filter: grayscale(100%); transform: scale(1.01); }
-        .project-card:hover .project-image { filter: grayscale(0%); transform: scale(1.06); }
-        img { transition: transform 1.2s ease; }
-        img:hover { transform: scale(1.03); }
+        body { 
+            background-color: #0a0a0c; 
+            color: #ffffff;
+            overflow-x: hidden; 
+        }
+
+        /* Fixed 3D Canvas Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass-panel {
+            background: rgba(18, 18, 22, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(255, 46, 46, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(255, 46, 46, 0.2);
+        }
+
+        /* AUTO-SCROLL MARQUEE (Right to Left) */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+
+        .marquee-container:hover .animate-marquee {
+            animation-play-state: paused;
+        }
+
+        .mask-gradient {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .horizontal-scroller {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 1.5rem;
+            scroll-snap-type: x mandatory;
+        }
+        .horizontal-scroller::-webkit-scrollbar {
+            height: 4px;
+        }
+        .horizontal-scroller::-webkit-scrollbar-thumb {
+            background: #ff2e2e;
+            border-radius: 10px;
+        }
+        .project-item {
+            scroll-snap-align: start;
+            flex: 0 0 85%;
+        }
+        @media (min-width: 768px) {
+            .project-item { flex: 0 0 42%; }
+        }
     </style>
 </head>
-<body class="text-white antialiased selection:bg-accentYellow selection:text-black">
+<body class="antialiased selection:bg-accentRed selection:text-white">
 
-<!-- Navigation -->
-<nav class="fixed w-full z-50 bg-darkBg/90 backdrop-blur-md border-b border-white/5">
-    <div class="max-w-7xl mx-auto px-8 py-5 flex justify-between items-center">
-        <div class="flex items-center gap-2 group cursor-pointer">
-            <div class="w-8 h-8 bg-accentYellow rounded-br-lg flex items-center justify-center text-black font-black transition-transform group-hover:rotate-12">M</div>
-            <span class="font-black tracking-tighter text-xl">EL FARH.</span>
+    <div id="canvas-container"></div>
+
+    <nav class="fixed w-full z-50 bg-bgDark/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-accentRed rounded flex items-center justify-center text-black font-black font-mono text-sm shadow-[0_0_15px_rgba(255,46,46,0.5)]">
+                    &lt;/&gt;
+                </div>
+                <span class="font-mono font-bold tracking-tight text-sm text-white">
+                    EL FARH <span class="text-accentRed">.DEV</span>
+                </span>
+            </div>
+            <ul class="hidden md:flex gap-8 text-[11px] font-mono uppercase tracking-widest text-zinc-400">
+                <li><a href="#about" class="hover:text-accentRed transition"> About</a></li>
+                <li><a href="#skills" class="hover:text-accentRed transition"> Skills</a></li>
+                <li><a href="#experience" class="hover:text-accentRed transition"> Experience</a></li>
+                <li><a href="#portfolio" class="hover:text-accentRed transition"> Projects</a></li>
+                <li><a href="#contact" class="hover:text-accentRed transition"> Contact</a></li>
+            </ul>
         </div>
-        <ul class="hidden md:flex gap-10 text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500">
-            <li><a href="#about" class="hover:text-accentYellow transition">About</a></li>
-            <li><a href="#skills" class="hover:text-accentYellow transition">Skills</a></li>
-            <li><a href="#experience" class="hover:text-accentYellow transition">Experience</a></li>
-            <li><a href="#portfolio" class="hover:text-accentYellow transition">Projects</a></li>
-            <li><a href="#contact" class="hover:text-accentYellow transition">Contact</a></li>
-        </ul>
-    </div>
-</nav>
+    </nav>
 
-<!-- Header / Hero Section -->
-<header class="min-h-screen flex items-center px-8 pt-20">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center w-full">
-        <div class="reveal">
-            <h1 class="text-6xl md:text-[95px] font-black leading-[0.85] mb-8 tracking-tighter">
-                Mohamed <br> <span class="text-accentYellow">El Farh.</span>
+    <header id="about" class="relative z-10 min-h-screen flex flex-col justify-center px-6 pt-24 pb-12 overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div class="w-[500px] h-[500px] bg-accentRed/10 rounded-full blur-[140px]"></div>
+        </div>
+
+        <div class="max-w-5xl mx-auto w-full text-center relative z-20">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-900/80 border border-zinc-800 backdrop-blur-md mb-8">
+                <span class="w-2 h-2 rounded-full bg-accentRed animate-ping"></span>
+                <span class="text-zinc-300 text-xs font-mono">Available for Hire & Projects</span>
+            </div>
+
+            <div class="relative w-40 h-40 mx-auto mb-8 group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-accentRed to-zinc-700 rounded-full blur opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                <div class="relative w-full h-full rounded-full overflow-hidden border-2 border-zinc-800 bg-zinc-900 p-1">
+                    <img src="profil.png" alt="Mohamed El Farh" class="w-full h-full object-cover rounded-full filter grayscale hover:grayscale-0 transition duration-500">
+                </div>
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-syne font-extrabold tracking-tight mb-4">
+                MOHAMED <span class="text-transparent bg-clip-text bg-gradient-to-r from-accentRed via-red-500 to-zinc-400">EL FARH</span>
             </h1>
-            <p class="text-gray-400 text-lg font-medium mb-8 max-w-md">
-                Junior Full-Stack Web Developer specializing in <b class="text-white">MERN Stack</b> & <b class="text-white">PHP/Laravel</b>. Passionate about building production-ready applications with clean code and modern design.
+            
+            <p class="font-mono text-accentRed text-sm sm:text-base mb-6 tracking-wide">
+                &gt; Full-Stack Web Developer & Laravel Specialist
             </p>
-            <div class="flex gap-8 mb-12 items-center">
-                <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="text-gray-500 hover:text-white transition font-bold text-xs tracking-widest uppercase border-b border-transparent hover:border-white">Github</a>
-                <a href="https://www.linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank" class="text-gray-500 hover:text-white transition font-bold text-xs tracking-widest uppercase border-b border-transparent hover:border-white">LinkedIn</a>
-            </div>
-            <a href="#contact" class="inline-block border-b-2 border-accentYellow pb-2 text-[10px] uppercase tracking-[0.4em] font-black hover:text-accentYellow transition hover:-translate-y-1 transition-transform">Start Collaboration →</a>
-        </div>
 
-        <div class="relative reveal" style="transition-delay: 200ms;">
-            <div class="bg-accentYellow aspect-[4/5] md:w-[85%] ml-auto rounded-sm overflow-hidden group shadow-2xl">
-                <img src="profil.png" alt="Mohamed El Farh" class="w-full h-full object-cover grayscale mix-blend-multiply group-hover:grayscale-0 group-hover:mix-blend-normal transition duration-1000">
-            </div>
-            <div class="absolute -bottom-10 left-0 md:left-8 bg-cardGray p-8 border border-white/5 shadow-2xl max-w-sm">
-                <p class="text-accentYellow text-[9px] uppercase tracking-[0.4em] font-black mb-2">// Full Stack Developer</p>
-                <p class="text-gray-300 text-sm leading-relaxed font-medium">YouCode Student | Proficient in <b>Laravel, MERN, Vue.js, React Native</b> & <b>MySQL/MongoDB</b>. Experienced in deploying web apps to production hosting environments.</p>
+            <p class="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-light leading-relaxed">
+                Crafting scalable backends with <strong class="text-white font-semibold">Laravel & REST APIs</strong> and reactive modern interfaces with <strong class="text-white font-semibold">React, Vue.js & Tailwind CSS</strong>.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="#portfolio" class="bg-accentRed hover:bg-red-600 text-white font-mono font-bold text-xs uppercase px-8 py-3.5 rounded-lg transition-all shadow-[0_0_20px_rgba(255,46,46,0.3)]">
+                    Explore Projects
+                </a>
+                <a href="#contact" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-mono font-bold text-xs uppercase px-8 py-3.5 rounded-lg transition-all">
+                    Contact Me
+                </a>
             </div>
         </div>
+    </header>
+
+    <section id="skills" class="relative z-10 py-24 bg-[#0a0a0c] border-t border-zinc-900 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentRed/10 border border-accentRed/20 text-accentRed font-mono text-xs mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accentRed animate-pulse"></span>
+                <span>SYSTEM_CAPABILITIES v2.6</span>
+            </div>
+            <h2 class="font-syne text-3xl md:text-5xl font-extrabold tracking-tight">Technical Spectrum.</h2>
+        </div>
+        <p class="text-zinc-500 font-mono text-xs">HOVER CARDS TO INTERACT WITH 3D CANVAS & STOP MARQUEE</p>
     </div>
-</header>
 
-<!-- Skills Section -->
-<section id="skills" class="py-32 px-8 bg-white/[0.02]">
-    <div class="max-w-7xl mx-auto">
-        <div class="mb-20 reveal">
-            <p class="text-accentYellow text-[10px] uppercase tracking-[0.5em] font-black mb-4">// Tech Stack & Expertise</p>
-            <h2 class="text-5xl md:text-6xl font-black tracking-tighter italic underline decoration-accentYellow decoration-4 underline-offset-8">Skills.</h2>
-        </div>
+    <div class="marquee-container mask-gradient w-full overflow-hidden py-4">
+        <div class="animate-marquee flex gap-8">
+            
+            <!-- FIRST SET OF CARDS -->
+            <div class="flex gap-8">
+                
+                <!-- CARD 1: FRONTEND -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Frontend & Interface</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">UI/UX</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="cube"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">React.js</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Vue 3</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">React Native</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Tailwind CSS</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Création d'interfaces web et mobiles modernes, fluides et totalement adaptatives.</p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="grid md:grid-cols-3 gap-8 reveal">
-            <!-- MERN & Frontend -->
-            <div class="bg-cardGray p-8 border border-white/5 rounded-lg">
-                <h3 class="text-accentYellow font-black text-xl mb-4 uppercase tracking-wider">Frontend & MERN</h3>
-                <ul class="text-gray-300 text-sm space-y-2 font-medium">
-                    <li>• React.js & React Native (Expo)</li>
-                    <li>• Vue.js (Vue 3 / Vite)</li>
-                    <li>• Node.js & Express.js</li>
-                    <li>• Tailwind CSS & Glassmorphism UI</li>
-                    <li>• JavaScript (ES6+), HTML5, CSS3</li>
-                </ul>
+                <!-- CARD 2: BACKEND -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Backend & Serveur</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">API & CORE</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="octahedron"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Laravel</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Node.js</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Express.js</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">REST API</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Développement de serveurs performants, sécurisés et d'APIs pour la gestion des données.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 3: DATABASE -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Bases de Données</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">STORAGE</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="torus"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">MySQL</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">MongoDB</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">SQLite</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Conception et optimisation de bases de données relationnelles et NoSQL.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 4: DEVOPS -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Outils & DevOps</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">DEVOPS</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="tetrahedron"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Docker</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Git / GitHub</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Postman</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Swagger</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Conteneurisation, gestion de version de code et documentation d'APIs.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- PHP & Databases -->
-            <div class="bg-cardGray p-8 border border-white/5 rounded-lg">
-                <h3 class="text-accentYellow font-black text-xl mb-4 uppercase tracking-wider">Backend & Databases</h3>
-                <ul class="text-gray-300 text-sm space-y-2 font-medium">
-                    <li>• PHP & Laravel (MVC Architecture)</li>
-                    <li>• Eloquent ORM & Middleware Security</li>
-                    <li>• MySQL & SQLite</li>
-                    <li>• MongoDB (NoSQL)</li>
-                    <li>• RESTful API Design & Sanctum Auth</li>
-                </ul>
+            <!-- DUPLICATE SET FOR INFINITE MARQUEE -->
+            <div class="flex gap-8">
+                
+                <!-- CARD 1 DUP -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Frontend & Interface</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">UI/UX</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="cube"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">React.js</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Vue 3</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">React Native</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Tailwind CSS</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Création d'interfaces web et mobiles modernes, fluides et totalement adaptatives.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2 DUP -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Backend & Serveur</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">API & CORE</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="octahedron"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Laravel</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Node.js</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Express.js</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">REST API</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Développement de serveurs performants, sécurisés et d'APIs pour la gestion des données.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 3 DUP -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Bases de Données</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">STORAGE</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="torus"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">MySQL</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">MongoDB</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">SQLite</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Conception et optimisation de bases de données relationnelles et NoSQL.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 4 DUP -->
+                <div class="w-96 glass-panel rounded-xl glass-card-hover flex-shrink-0 overflow-hidden border border-zinc-800/80 bg-zinc-950/80 relative group">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800/80 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">Outils & DevOps</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">DEVOPS</span>
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute right-3 top-3 w-20 h-20 opacity-30 group-hover:opacity-100 transition-opacity">
+                            <canvas class="card-3d-canvas" data-shape="tetrahedron"></canvas>
+                        </div>
+                        <div class="space-y-3">
+                            <p class="text-xs font-mono text-zinc-500">Technologies Principales</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Docker</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Git / GitHub</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Postman</span>
+                                <span class="px-2.5 py-1 text-xs rounded bg-zinc-900 border border-zinc-800 text-zinc-200">Swagger</span>
+                            </div>
+                            <p class="text-zinc-400 pt-2 text-[11px] font-sans">Conteneurisation, gestion de version de code et documentation d'APIs.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Tools & DevOps -->
-            <div class="bg-cardGray p-8 border border-white/5 rounded-lg">
-                <h3 class="text-accentYellow font-black text-xl mb-4 uppercase tracking-wider">Tools & Workflow</h3>
-                <ul class="text-gray-300 text-sm space-y-2 font-medium">
-                    <li>• Git & GitHub Version Control</li>
-                    <li>• Docker Containerization</li>
-                    <li>• Postman & Swagger Documentation</li>
-                    <li>• Jira (Agile / Scrum Task Management)</li>
-                    <li>• Web Hosting (cPanel / Cap Connect)</li>
-                </ul>
-            </div>
         </div>
     </div>
 </section>
 
-<!-- Experience Section -->
-<section id="experience" class="py-32 px-8">
+   <section id="experience" class="relative z-10 py-24 px-6 bg-[#0a0a0c] border-t border-zinc-900">
     <div class="max-w-7xl mx-auto">
-        <div class="mb-20 reveal">
-            <p class="text-accentYellow text-[10px] uppercase tracking-[0.5em] font-black mb-4">// Practical Experience</p>
-            <h2 class="text-5xl md:text-6xl font-black tracking-tighter italic underline decoration-accentYellow decoration-4 underline-offset-8">Internships.</h2>
+        
+        <div class="mb-16 text-center max-w-2xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentRed/10 border border-accentRed/20 text-accentRed font-mono text-xs mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accentRed animate-ping"></span>
+                <span>CAREER_DUAL_PILLARS.LOG</span>
+            </div>
+            <h2 class="font-syne text-4xl md:text-6xl font-extrabold tracking-tight">Experience.</h2>
+            <p class="text-zinc-500 font-mono text-xs mt-3"> SPLIT-PANEL ARCHITECTURE WITH INTEGRATED 3D ENGINES</p>
         </div>
 
-        <div class="space-y-12 reveal">
-            <!-- Internship 1 -->
-            <div class="bg-cardGray p-10 border-l-4 border-accentYellow rounded-r-lg shadow-xl">
-                <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
-                    <h3 class="text-2xl font-black uppercase">Digiglow — <span class="text-accentYellow">End-of-Studies Intern</span></h3>
-                    <span class="text-gray-500 text-xs uppercase tracking-widest font-bold mt-2 md:mt-0">July 2026 – Aughust</span>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+
+            <div class="glass-panel rounded-3xl border border-zinc-800/80 bg-zinc-950/90 relative group overflow-hidden flex flex-col justify-between hover:border-accentRed/60 transition-all duration-700 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+                
+                <div class="absolute -top-20 -left-20 w-72 h-72 bg-accentRed/10 rounded-full blur-[100px] group-hover:bg-accentRed/20 transition duration-700 pointer-events-none"></div>
+
+                <div class="p-8 pb-4 relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-mono text-xs text-zinc-400 bg-zinc-900 border border-zinc-800 px-4 py-1.5 rounded-full">August 2026 – Present</span>
+                        <span class="text-xs font-mono font-bold text-accentRed bg-accentRed/10 px-3 py-1 rounded-md border border-accentRed/20">ENTERPRISE STACK</span>
+                    </div>
+
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h3 class="font-syne font-black text-3xl sm:text-4xl text-white group-hover:text-accentRed transition-colors">Digiglow</h3>
+                            <p class="text-accentRed font-mono text-xs font-semibold mt-1">&gt; End-of-Studies Web Developer Intern</p>
+                        </div>
+
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-2xl overflow-hidden border-2 border-accentRed/40 bg-zinc-900 p-1 group-hover:border-accentRed group-hover:scale-105 transition-all duration-500 shadow-[0_0_20px_rgba(255,46,46,0.3)]">
+                            <img src="https://digiglow.ma/_next/image?url=%2Fassets%2Fimages%2Flogo.png&w=384&q=75" alt="Digiglow Work" class="w-full h-full object-cover rounded-xl filter grayscale group-hover:grayscale-0 transition duration-500">
+                        </div>
+                    </div>
                 </div>
-                <p class="text-gray-300 text-sm leading-relaxed">
-                    Worked on full-stack web applications, designing scalable backend features and integrating modern user interfaces. Responsible for generating end-of-studies project deliverables and maintaining production codebases.
-                </p>
+
+                <div class="relative py-8 my-2 flex items-center justify-center">
+                    <div class="absolute inset-0 flex items-center px-6">
+                        <div class="w-full border-t border-zinc-800 group-hover:border-accentRed/40 transition-colors"></div>
+                    </div>
+                    
+                    <div class="relative z-10 w-32 h-32 bg-zinc-950 border border-zinc-800 rounded-full flex items-center justify-center shadow-xl group-hover:border-accentRed transition-all">
+                        <canvas class="split-card-3d-canvas" data-shape="torusKnot"></canvas>
+                    </div>
+                </div>
+
+                <div class="p-8 pt-4 relative z-10 flex-1 flex flex-col justify-between">
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+                        Engineering scalable web microservices, driving automated Mocha unit testing suites, creating robust MongoDB schemas, and documenting high-concurrency Node.js / Express APIs with Swagger.
+                    </p>
+
+                    <div class="space-y-3">
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest"> Core Technologies & Tools</div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Node.js</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Express.js</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">React.js</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">MongoDB</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Docker</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Swagger Docs</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Mocha Unit Test</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Postman</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Internship 2 -->
-            <div class="bg-cardGray p-10 border-l-4 border-gray-600 rounded-r-lg shadow-xl">
-                <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
-                    <h3 class="text-2xl font-black uppercase">Prestart Agency SARL — <span class="text-accentYellow">Web Developer Intern</span></h3>
-                    <span class="text-gray-500 text-xs uppercase tracking-widest font-bold mt-2 md:mt-0">May 2026 – July 2026</span>
+            <div class="glass-panel rounded-3xl border border-zinc-800/80 bg-zinc-950/90 relative group overflow-hidden flex flex-col justify-between hover:border-accentRed/60 transition-all duration-700 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+                
+                <div class="absolute -top-20 -right-20 w-72 h-72 bg-accentRed/10 rounded-full blur-[100px] group-hover:bg-accentRed/20 transition duration-700 pointer-events-none"></div>
+
+                <div class="p-8 pb-4 relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-mono text-xs text-zinc-400 bg-zinc-900 border border-zinc-800 px-4 py-1.5 rounded-full">May 5, 2026 – July 3, 2026</span>
+                        <span class="text-xs font-mono font-bold text-zinc-400 bg-zinc-900 px-3 py-1 rounded-md border border-zinc-800">FULL-STACK ENGINE</span>
+                    </div>
+
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h3 class="font-syne font-black text-3xl sm:text-4xl text-white group-hover:text-accentRed transition-colors">Prestart Agency</h3>
+                            <p class="text-zinc-400 font-mono text-xs font-semibold mt-1">&gt; Web Developer Intern</p>
+                        </div>
+
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-2xl overflow-hidden border-2 border-zinc-700 bg-zinc-900 p-1 group-hover:border-accentRed group-hover:scale-105 transition-all duration-500 shadow-[0_0_20px_rgba(255,46,46,0.3)]">
+                            <img src="https://prestartagency.com/wp-content/uploads/2026/06/prestart-logo-scaled.webp" alt="Prestart Work" class="w-full h-full object-cover rounded-xl filter grayscale group-hover:grayscale-0 transition duration-500">
+                        </div>
+                    </div>
                 </div>
-                <p class="text-gray-300 text-sm leading-relaxed">
-                    Developed web features, optimized database queries, and implemented responsive frontend layouts for client projects using PHP, Laravel, and Tailwind CSS.
-                </p>
+
+                <div class="relative py-8 my-2 flex items-center justify-center">
+                    <div class="absolute inset-0 flex items-center px-6">
+                        <div class="w-full border-t border-zinc-800 group-hover:border-accentRed/40 transition-colors"></div>
+                    </div>
+                    
+                    <div class="relative z-10 w-32 h-32 bg-zinc-950 border border-zinc-800 rounded-full flex items-center justify-center shadow-xl group-hover:border-accentRed transition-all">
+                        <canvas class="split-card-3d-canvas" data-shape="icosahedron"></canvas>
+                    </div>
+                </div>
+
+                <div class="p-8 pt-4 relative z-10 flex-1 flex flex-col justify-between">
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+                        Architecting PHP/Laravel MVC applications, optimizing complex MySQL relational database queries, building reactive UI layouts with Tailwind CSS, writing automated PHP Unit tests, and embedding AI services with Python integration.
+                    </p>
+
+                    <div class="space-y-3">
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Core Technologies & Tools</div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Laravel</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Tailwind CSS</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">MySQL Database</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">PHPUnit Tests</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">AI Integration</span>
+                            <span class="bg-zinc-900 border border-zinc-800 text-zinc-200 font-mono text-xs px-3 py-1.5 rounded-lg">Python Automation</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- Portfolio Projects Section -->
-<section id="portfolio" class="py-32 px-8 bg-white/[0.02]">
-    <div class="max-w-7xl mx-auto">
-        <div class="mb-24 reveal">
-            <p class="text-accentYellow text-[10px] uppercase tracking-[0.5em] font-black mb-4">// Featured Work</p>
-            <h2 class="text-6xl md:text-7xl font-black tracking-tighter italic underline decoration-accentYellow decoration-4 underline-offset-8">Projects.</h2>
+ <section id="portfolio" class="relative z-10 py-24 bg-[#0a0a0c] border-t border-zinc-900 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentRed/10 border border-accentRed/20 text-accentRed font-mono text-xs mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accentRed animate-ping"></span>
+                <span>FEATURED_WORK.DEPLOYED</span>
+            </div>
+            <h2 class="font-syne text-3xl md:text-5xl font-extrabold tracking-tight text-white">Selected Projects.</h2>
         </div>
+        <p class="text-zinc-500 font-mono text-xs">INFINITE AUTO-SCROLL & REAL 3D PHOTO DEPTH</p>
+    </div>
 
-        <div class="grid md:grid-cols-2 gap-x-20 gap-y-32">
-            <!-- Project 1: Elegy Boutique -->
-            <div class="reveal project-card group">
-                <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="block">
-                    <div class="bg-zinc-900 aspect-video overflow-hidden mb-8 border border-white/5 rounded-lg shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover project-image" alt="Elegy Fragrance Boutique">
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="text-3xl font-black uppercase italic tracking-tighter group-hover:text-accentYellow transition-colors">Elegy Boutique</h4>
-                            <p class="text-gray-500 text-[10px] tracking-[0.2em] uppercase mt-2 font-bold italic">Laravel • MySQL • Tailwind CSS • Live Host</p>
+    <div class="marquee-container mask-gradient w-full overflow-hidden py-4 mb-6">
+        <div class="animate-marquee flex gap-8">
+            
+            <div class="flex gap-8">
+                
+                <div class="w-[420px] glass-panel rounded-2xl border border-zinc-800/80 bg-zinc-950/90 flex-shrink-0 overflow-hidden group hover:border-accentRed/60 transition-all duration-500 relative">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
                         </div>
-                        <div class="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">↗</div>
+                        <span class="font-mono text-[11px] text-zinc-400">elegy-boutique.app</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">PRODUCTION</span>
                     </div>
-                </a>
+
+                    <div class="p-4 perspective-container">
+                        <div class="project-3d-card aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 relative shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop" class="project-3d-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500" alt="Elegy Fragrance Boutique">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                            <span class="absolute bottom-2 left-3 font-mono text-[10px] text-accentRed tracking-widest">REAL_PREVIEW: ELEGY</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <span class="text-accentRed font-mono text-[10px] font-bold uppercase tracking-wider block mb-2">Laravel • MySQL • Tailwind</span>
+                        <h3 class="font-syne font-bold text-xl text-white mb-2 group-hover:text-accentRed transition-colors">Elegy Fragrance Boutique</h3>
+                        <p class="text-zinc-400 text-xs mb-4 leading-relaxed font-light">E-commerce boutique platform with production deployment configuration.</p>
+                        <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-white group-hover:text-accentRed transition-colors">
+                            <span>Source Code</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-[420px] glass-panel rounded-2xl border border-zinc-800/80 bg-zinc-950/90 flex-shrink-0 overflow-hidden group hover:border-accentRed/60 transition-all duration-500 relative">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">spacecoloc.system</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">MVC ENGINE</span>
+                    </div>
+
+                    <div class="p-4 perspective-container">
+                        <div class="project-3d-card aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 relative shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop" class="project-3d-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500" alt="SpaceColoc">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                            <span class="absolute bottom-2 left-3 font-mono text-[10px] text-accentRed tracking-widest">REAL_PREVIEW: SPACECOLOC</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <span class="text-accentRed font-mono text-[10px] font-bold uppercase tracking-wider block mb-2">Laravel MVC • Eloquent</span>
+                        <h3 class="font-syne font-bold text-xl text-white mb-2 group-hover:text-accentRed transition-colors">SpaceColoc Platform</h3>
+                        <p class="text-zinc-400 text-xs mb-4 leading-relaxed font-light">Shared housing expense management system with automated debt calculations.</p>
+                        <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-white group-hover:text-accentRed transition-colors">
+                            <span>Source Code</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-[420px] glass-panel rounded-2xl border border-zinc-800/80 bg-zinc-950/90 flex-shrink-0 overflow-hidden group hover:border-accentRed/60 transition-all duration-500 relative">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">larabookmarks.api</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">REST API</span>
+                    </div>
+
+                    <div class="p-4 perspective-container">
+                        <div class="project-3d-card aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 relative shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop" class="project-3d-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500" alt="LaraBookmarks">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                            <span class="absolute bottom-2 left-3 font-mono text-[10px] text-accentRed tracking-widest"> REAL_PREVIEW: LARABOOKMARKS</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <span class="text-accentRed font-mono text-[10px] font-bold uppercase tracking-wider block mb-2">Laravel REST API • Security</span>
+                        <h3 class="font-syne font-bold text-xl text-white mb-2 group-hover:text-accentRed transition-colors">LaraBookmarks</h3>
+                        <p class="text-zinc-400 text-xs mb-4 leading-relaxed font-light">Secure bookmarking API service protected by token middleware.</p>
+                        <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-white group-hover:text-accentRed transition-colors">
+                            <span>Source Code</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Project 2: SpaceColoc -->
-            <div class="reveal project-card group md:mt-20">
-                <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="block">
-                    <div class="bg-zinc-900 aspect-video overflow-hidden mb-8 border border-white/5 rounded-lg shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover project-image" alt="SpaceColoc Housing App">
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="text-3xl font-black uppercase italic tracking-tighter group-hover:text-accentYellow transition-colors">SpaceColoc</h4>
-                            <p class="text-gray-500 text-[10px] tracking-[0.2em] uppercase mt-2 font-bold italic">Laravel MVC • Eloquent • Shared Housing App</p>
+            <div class="flex gap-8">
+                <div class="w-[420px] glass-panel rounded-2xl border border-zinc-800/80 bg-zinc-950/90 flex-shrink-0 overflow-hidden group hover:border-accentRed/60 transition-all duration-500 relative">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
                         </div>
-                        <div class="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">↗</div>
+                        <span class="font-mono text-[11px] text-zinc-400">elegy-boutique.app</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">PRODUCTION</span>
                     </div>
-                </a>
+
+                    <div class="p-4 perspective-container">
+                        <div class="project-3d-card aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 relative shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1200&auto=format&fit=crop" class="project-3d-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500" alt="Elegy Fragrance Boutique">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                            <span class="absolute bottom-2 left-3 font-mono text-[10px] text-accentRed tracking-widest"> REAL_PREVIEW: ELEGY</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <span class="text-accentRed font-mono text-[10px] font-bold uppercase tracking-wider block mb-2">Laravel • MySQL • Tailwind</span>
+                        <h3 class="font-syne font-bold text-xl text-white mb-2 group-hover:text-accentRed transition-colors">Elegy Fragrance Boutique</h3>
+                        <p class="text-zinc-400 text-xs mb-4 leading-relaxed font-light">E-commerce boutique platform with production deployment configuration.</p>
+                        <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-white group-hover:text-accentRed transition-colors">
+                            <span>Source Code</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-[420px] glass-panel rounded-2xl border border-zinc-800/80 bg-zinc-950/90 flex-shrink-0 overflow-hidden group hover:border-accentRed/60 transition-all duration-500 relative">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">spacecoloc.system</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">MVC ENGINE</span>
+                    </div>
+
+                    <div class="p-4 perspective-container">
+                        <div class="project-3d-card aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 relative shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop" class="project-3d-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500" alt="SpaceColoc">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                            <span class="absolute bottom-2 left-3 font-mono text-[10px] text-accentRed tracking-widest"> REAL_PREVIEW: SPACECOLOC</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <span class="text-accentRed font-mono text-[10px] font-bold uppercase tracking-wider block mb-2">Laravel MVC • Eloquent</span>
+                        <h3 class="font-syne font-bold text-xl text-white mb-2 group-hover:text-accentRed transition-colors">SpaceColoc Platform</h3>
+                        <p class="text-zinc-400 text-xs mb-4 leading-relaxed font-light">Shared housing expense management system with automated debt calculations.</p>
+                        <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-white group-hover:text-accentRed transition-colors">
+                            <span>Source Code</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="w-[420px] glass-panel rounded-2xl border border-zinc-800/80 bg-zinc-950/90 flex-shrink-0 overflow-hidden group hover:border-accentRed/60 transition-all duration-500 relative">
+                    <div class="bg-zinc-900/90 px-4 py-2.5 border-b border-zinc-800 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+                        </div>
+                        <span class="font-mono text-[11px] text-zinc-400">larabookmarks.api</span>
+                        <span class="text-[10px] font-mono text-accentRed bg-accentRed/10 px-2 py-0.5 rounded">REST API</span>
+                    </div>
+
+                    <div class="p-4 perspective-container">
+                        <div class="project-3d-card aspect-video rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 relative shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop" class="project-3d-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-500" alt="LaraBookmarks">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent"></div>
+                            <span class="absolute bottom-2 left-3 font-mono text-[10px] text-accentRed tracking-widest"> REAL_PREVIEW: LARABOOKMARKS</span>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <span class="text-accentRed font-mono text-[10px] font-bold uppercase tracking-wider block mb-2">Laravel REST API • Security</span>
+                        <h3 class="font-syne font-bold text-xl text-white mb-2 group-hover:text-accentRed transition-colors">LaraBookmarks</h3>
+                        <p class="text-zinc-400 text-xs mb-4 leading-relaxed font-light">Secure bookmarking API service protected by token middleware.</p>
+                        <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="inline-flex items-center gap-2 text-xs font-mono font-bold text-white group-hover:text-accentRed transition-colors">
+                            <span>Source Code</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <!-- Project 3: LaraBookmarks -->
-            <div class="reveal project-card group">
-                <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="block">
-                    <div class="bg-zinc-900 aspect-video overflow-hidden mb-8 border border-white/5 rounded-lg shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover project-image" alt="LaraBookmarks App">
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="text-3xl font-black uppercase italic tracking-tighter group-hover:text-accentYellow transition-colors">LaraBookmarks</h4>
-                            <p class="text-gray-500 text-[10px] tracking-[0.2em] uppercase mt-2 font-bold italic">Laravel • RESTful API • Middleware Security</p>
-                        </div>
-                        <div class="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">↗</div>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Project 4: Weather Expo Mobile App -->
-            <div class="reveal project-card group md:mt-20">
-                <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="block">
-                    <div class="bg-zinc-900 aspect-video overflow-hidden mb-8 border border-white/5 rounded-lg shadow-xl">
-                        <img src="https://images.unsplash.com/photo-1504386106331-3e4e71712b38?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover project-image" alt="React Native Weather App">
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h4 class="text-3xl font-black uppercase italic tracking-tighter group-hover:text-accentYellow transition-colors">Weather Expo App</h4>
-                            <p class="text-gray-500 text-[10px] tracking-[0.2em] uppercase mt-2 font-bold italic">React Native • Expo • OpenWeatherMap API</p>
-                        </div>
-                        <div class="w-12 h-12 border border-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">↗</div>
-                    </div>
-                </a>
-            </div>
         </div>
     </div>
 </section>
+<section id="testimonials-3d" class="relative z-10 py-32 bg-[#050507] border-t border-zinc-900 overflow-hidden min-h-screen flex flex-col justify-center select-none">
+    
+    <canvas id="reviews-3d-bg" class="absolute inset-0 w-full h-full pointer-events-none opacity-35 z-0"></canvas>
 
-<!-- Footer / Contact Section -->
-<footer id="contact" class="py-32 px-8 bg-cardGray relative overflow-hidden">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 relative z-10">
-        <div class="reveal">
-            <h2 class="text-6xl md:text-8xl font-black mb-12 tracking-tighter italic leading-[0.85]">Let's Work <br> <span class="text-accentYellow">Together.</span></h2>
-            <div class="space-y-6">
-                <p class="text-gray-400 max-w-sm text-lg font-medium">Available for remote opportunities, full-time contracts, and paid internships.</p>
-                <div class="pt-4">
-                    <p class="text-[10px] uppercase tracking-[0.4em] font-black text-gray-500 mb-2">// Direct Contact</p>
-                    <a href="mailto:mohamedlfarh7@gmail.com" class="text-2xl md:text-3xl font-black hover:text-accentYellow transition-colors underline decoration-1 underline-offset-8">mohamedlfarh7@gmail.com</a>
-                </div>
-            </div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[450px] bg-accentRed/10 blur-[200px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 mb-16 text-center relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentRed/10 border border-accentRed/20 text-accentRed font-mono text-xs mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-accentRed animate-ping"></span>
+            <span>3D_PEER_REVIEWS.LOG</span>
         </div>
-
-        <form action="https://formspree.io/f/xnqxxxx" method="POST" class="space-y-8 reveal bg-darkBg p-8 md:p-12 rounded-lg border border-white/5 shadow-2xl">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="border-b border-white/10 py-4 focus-within:border-accentYellow transition">
-                    <label class="text-[9px] uppercase tracking-widest text-gray-500 block mb-2 font-black">Full Name</label>
-                    <input type="text" name="name" required class="bg-transparent w-full outline-none text-white font-semibold" placeholder="Your name">
-                </div>
-                <div class="border-b border-white/10 py-4 focus-within:border-accentYellow transition">
-                    <label class="text-[9px] uppercase tracking-widest text-gray-500 block mb-2 font-black">Email</label>
-                    <input type="email" name="email" required class="bg-transparent w-full outline-none text-white font-semibold" placeholder="your@email.com">
-                </div>
-            </div>
-            <div class="border-b border-white/10 py-4 focus-within:border-accentYellow transition">
-                <label class="text-[9px] uppercase tracking-widest text-gray-500 block mb-2 font-black">Message</label>
-                <textarea name="message" required rows="4" class="bg-transparent w-full outline-none text-white font-semibold resize-none" placeholder="Tell me about your project or offer..."></textarea>
-            </div>
-            <button type="submit" class="w-full md:w-auto bg-accentYellow text-black px-14 py-5 text-[11px] font-black uppercase tracking-[0.4em] hover:bg-white transition-all transform hover:-translate-y-1 shadow-lg">Send Message</button>
-        </form>
+        <h2 class="font-syne text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-3">Professional Reviews.</h2>
+        <p class="text-zinc-400 font-mono text-xs tracking-wider">// SCROLL OR DRAG TO ROTATE 3D CIRCLE</p>
     </div>
 
-    <div class="max-w-7xl mx-auto mt-40 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[9px] uppercase tracking-[0.4em] text-gray-600 font-bold">
-        <p>© 2026 Mohamed El Farh. All Rights Reserved.</p>
-        <div class="flex gap-10 mt-8 md:mt-0">
-            <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="hover:text-white transition italic underline decoration-accentYellow decoration-2 underline-offset-4">GitHub</a>
-            <a href="https://www.linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank" class="hover:text-white transition italic underline decoration-accentYellow decoration-2 underline-offset-4">LinkedIn</a>
+    <div class="relative w-full h-[520px] flex items-center justify-center perspective-stage z-10">
+        
+        <div id="circle-carousel" class="carousel-3d-ring">
+            
+            <div class="carousel-3d-card glass-panel p-8 rounded-3xl border border-zinc-800/90 bg-zinc-950/95 text-left flex flex-col justify-between shadow-[0_0_60px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex text-amber-400 gap-1 text-sm">★★★★★</div>
+                        <span class="font-mono text-[10px] text-accentRed bg-accentRed/10 border border-accentRed/20 px-2.5 py-1 rounded-full font-bold">END-OF-STUDIES INTERNSHIP</span>
+                    </div>
+                    <h3 class="font-syne font-black text-xl text-white mb-3">Digiglow</h3>
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed italic font-light">
+                        "Mohamed demonstrated exceptional full-stack capabilities during his internship, structuring production-ready Express APIs, MongoDB schemas, and automated testing pipelines."
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-zinc-900/80 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center font-mono font-bold text-accentRed text-xs">DG</div>
+                    <div>
+                        <h4 class="font-syne font-bold text-sm text-white">Digiglow Team</h4>
+                        <span class="font-mono text-[11px] text-zinc-500 block">End-of-Studies Internship Supervising Team</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-3d-card glass-panel p-8 rounded-3xl border border-zinc-800/90 bg-zinc-950/95 text-left flex flex-col justify-between shadow-[0_0_60px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex text-amber-400 gap-1 text-sm">★★★★★</div>
+                        <span class="font-mono text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full font-bold">WEB AGENCY</span>
+                    </div>
+                    <h3 class="font-syne font-black text-xl text-white mb-3">Prestart Agency SARL</h3>
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed italic font-light">
+                        "High rigor in Laravel MVC architecture and database query optimization. Mohamed contributed effectively to agency projects and team workflows."
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-zinc-900/80 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center font-mono font-bold text-accentRed text-xs">PA</div>
+                    <div>
+                        <h4 class="font-syne font-bold text-sm text-white">Prestart Agency</h4>
+                        <span class="font-mono text-[11px] text-zinc-500 block">Development & Technical Direction</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-3d-card glass-panel p-8 rounded-3xl border border-zinc-800/90 bg-zinc-950/95 text-left flex flex-col justify-between shadow-[0_0_60px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex text-amber-400 gap-1 text-sm">★★★★★</div>
+                        <span class="font-mono text-[10px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-full font-bold">PEER COLLABORATOR</span>
+                    </div>
+                    <h3 class="font-syne font-black text-xl text-white mb-3">"Reliable Engineering Mindset"</h3>
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed italic font-light">
+                        "Working alongside Mohamed on full-stack web applications showed his mastery in backend architecture, clean code standards, and agile collaboration."
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-zinc-900/80 flex items-center gap-4">
+                    <img src="" class="w-12 h-12 rounded-2xl object-cover border-2 border-zinc-700 shadow-md" alt="Badr Fenni">
+                    <div>
+                        <h4 class="font-syne font-bold text-sm text-white">Badr Fenni</h4>
+                        <span class="font-mono text-[11px] text-zinc-500 block">Full-Stack Engineer & Collaborator</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-3d-card glass-panel p-8 rounded-3xl border border-zinc-800/90 bg-zinc-950/95 text-left flex flex-col justify-between shadow-[0_0_60px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex text-amber-400 gap-1 text-sm">★★★★★</div>
+                        <span class="font-mono text-[10px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-full font-bold">PEER COLLABORATOR</span>
+                    </div>
+                    <h3 class="font-syne font-black text-xl text-white mb-3">"Problem Solver & Modern Stack"</h3>
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed italic font-light">
+                        "Mohamed consistently finds effective solutions for complex database relationships and REST APIs. A solid developer with great team synergy."
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-zinc-900/80 flex items-center gap-4">
+                    <img src="" class="w-12 h-12 rounded-2xl object-cover border-2 border-zinc-700 shadow-md" alt="Imran Benmiloud">
+                    <div>
+                        <h4 class="font-syne font-bold text-sm text-white">Imran Benmiloud</h4>
+                        <span class="font-mono text-[11px] text-zinc-500 block">Software Developer & Collaborator</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-3d-card glass-panel p-8 rounded-3xl border border-zinc-800/90 bg-zinc-950/95 text-left flex flex-col justify-between shadow-[0_0_60px_rgba(0,0,0,0.9)] backdrop-blur-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex text-amber-400 gap-1 text-sm">★★★★★</div>
+                        <span class="font-mono text-[10px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-1 rounded-full font-bold">PEER COLLABORATOR</span>
+                    </div>
+                    <h3 class="font-syne font-black text-xl text-white mb-3">"High Execution Speed"</h3>
+                    <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed italic font-light">
+                        "Great execution speed in both frontend interfaces with Tailwind/React and robust PHP/Laravel backends. Always delivers clean code."
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-zinc-900/80 flex items-center gap-4">
+                    <img src="" class="w-12 h-12 rounded-2xl object-cover border-2 border-zinc-700 shadow-md" alt="Mohamed Darkaoui">
+                    <div>
+                        <h4 class="font-syne font-bold text-sm text-white">Mohamed Darkaoui</h4>
+                        <span class="font-mono text-[11px] text-zinc-500 block">Web Developer & Collaborator</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
+    </div>
+
+    <div class="flex items-center justify-center gap-8 mt-12 relative z-10">
+        <button id="prev-3d" class="w-14 h-14 rounded-full border border-zinc-800 bg-zinc-950/80 text-white font-mono hover:border-accentRed hover:text-accentRed transition flex items-center justify-center text-lg shadow-xl hover:scale-105 active:scale-95">&larr;</button>
+        <span class="font-mono text-xs text-zinc-500 uppercase tracking-widest">ROTATE CYLINDER MATRIX //</span>
+        <button id="next-3d" class="w-14 h-14 rounded-full border border-zinc-800 bg-zinc-950/80 text-white font-mono hover:border-accentRed hover:text-accentRed transition flex items-center justify-center text-lg shadow-xl hover:scale-105 active:scale-95">&rarr;</button>
+    </div>
+
+</section>
+
+    <footer id="contact" class="relative z-10 pt-28 pb-12 px-6 bg-[#070709] border-t border-zinc-900/80 overflow-hidden min-h-screen flex flex-col justify-between">
+    
+    <canvas id="footer-3d-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-40 z-0"></canvas>
+    
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-accentRed/10 blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-accentRed/5 blur-[150px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto w-full relative z-10">
+        
+        <div class="mb-14 p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-zinc-400">
+            <div class="flex items-center gap-3">
+                <span class="flex h-2.5 w-2.5 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accentRed opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-accentRed"></span>
+                </span>
+                <span class="text-white font-bold tracking-wider">NODE_LOCATION: NADOR, MOROCCO</span>
+            </div>
+            <div class="flex items-center gap-6 text-[11px]">
+                <span>COORDS: <strong class="text-zinc-200">35.1681° N, 2.9335° W</strong></span>
+                <span class="hidden md:inline">REGION: <strong class="text-zinc-200">ORIENTAL / MOROCCO</strong></span>
+                <span>UTC: <strong id="utc-clock" class="text-accentRed">00:00:00 UTC</strong></span>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 items-start mb-16">
+            
+            <div class="lg:col-span-5 space-y-6">
+                <div>
+                    <span class="text-accentRed font-mono text-xs tracking-widest uppercase block mb-2"> INITIATE DIRECT COMMUNICATION</span>
+                    <h2 class="font-syne text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight mb-4">
+                        Let's Build Something High-Performance.
+                    </h2>
+                    <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed font-light">
+                        Based in Nador, Oriental, Morocco. Open for full-stack engineering contracts, Laravel/Node.js backend architectures, and custom web applications.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 gap-3">
+                    <div class="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md">
+                        <span class="font-mono text-[10px] text-zinc-500 uppercase block mb-1">Base Location</span>
+                        <span class="font-mono text-xs text-zinc-200 font-bold flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            Nador, Oriental, MA
+                        </span>
+                    </div>
+                    <div class="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md">
+                        <span class="font-mono text-[10px] text-zinc-500 uppercase block mb-1">System Availability</span>
+                        <span class="font-mono text-xs text-accentRed font-bold">99.9% / Open For Hiring</span>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl border border-zinc-800/90 bg-black/90 font-mono text-xs text-zinc-300 space-y-3 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-zinc-800/80 pb-2 text-[10px] text-zinc-500">
+                        <span>NADOR_CLI_NODE v2.4</span>
+                        <span class="text-emerald-500">CONNECTED</span>
+                    </div>
+                    <div id="cli-output" class="h-24 overflow-y-auto space-y-1 text-[11px] text-zinc-400 scrollbar-thin">
+                        <p class="text-accentRed"> Type 'nador', 'stack', or 'help' for info.</p>
+                    </div>
+                    <div class="flex items-center gap-2 pt-1 border-t border-zinc-900">
+                        <span class="text-accentRed font-bold">&gt;</span>
+                        <input type="text" id="cli-input" placeholder="enter command..." class="w-full bg-transparent text-xs text-white outline-none font-mono">
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 space-y-6">
+                <div class="p-6 rounded-2xl border border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md space-y-4">
+                    <span class="font-mono text-xs text-accentRed font-bold uppercase tracking-wider block border-b border-zinc-800 pb-2">QUICK_NAVIGATION</span>
+                    <ul class="space-y-2.5 font-mono text-xs text-zinc-400">
+                        <li><a href="#experience" class="hover:text-white hover:translate-x-1 transition-all inline-block">&rarr; Career Experience</a></li>
+                        <li><a href="#portfolio" class="hover:text-white hover:translate-x-1 transition-all inline-block">&rarr; Selected Projects</a></li>
+                        <li><a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="hover:text-white hover:translate-x-1 transition-all inline-block">&rarr; GitHub Repositories</a></li>
+                        <li><a href="https://www.linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank" class="hover:text-white hover:translate-x-1 transition-all inline-block">&rarr; LinkedIn Profile</a></li>
+                    </ul>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md space-y-3">
+                    <span class="font-mono text-xs text-zinc-300 font-bold uppercase tracking-wider block border-b border-zinc-800 pb-2">CORE_ENGINE_STACK</span>
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">Laravel</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">Node.js</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">Express</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">React</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">MySQL</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">MongoDB</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">Docker</span>
+                        <span class="bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[10px] px-2 py-0.5 rounded">Tailwind</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4">
+                <form action="https://formspree.io/f/xnqxxxx" method="POST" class="p-6 sm:p-8 rounded-2xl border border-zinc-800/90 bg-zinc-950/90 backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.8)] relative group">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-accentRed/30 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition duration-700 blur-sm pointer-events-none"></div>
+                    
+                    <div class="relative z-10 space-y-4">
+                        <div class="flex items-center justify-between border-b border-zinc-800 pb-3 mb-2">
+                            <span class="font-mono text-xs text-zinc-300 font-bold uppercase tracking-wider">DISPATCH_MESSAGE.SH</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/20 border border-yellow-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-green-500/20 border border-green-500"></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="font-mono text-[10px] text-zinc-400 uppercase tracking-widest block mb-1">01. IDENTIFIER / NAME</label>
+                            <input type="text" name="name" required placeholder="John Doe" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none focus:border-accentRed focus:ring-1 focus:ring-accentRed transition">
+                        </div>
+
+                        <div>
+                            <label class="font-mono text-[10px] text-zinc-400 uppercase tracking-widest block mb-1">02. ELECTRONIC MAIL</label>
+                            <input type="email" name="email" required placeholder="john@domain.com" class="w-full bg-zinc-900/90 border border-zinc-800 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none focus:border-accentRed focus:ring-1 focus:ring-accentRed transition">
+                        </div>
+
+                        <div>
+                            <label class="font-mono text-[10px] text-zinc-400 uppercase tracking-widest block mb-1">03. PAYLOAD / MESSAGE</label>
+                            <textarea name="message" rows="3" required placeholder="State project requirements or inquiry..." class="w-full bg-zinc-900/90 border border-zinc-800 rounded-lg px-3.5 py-2.5 text-xs text-white outline-none focus:border-accentRed focus:ring-1 focus:ring-accentRed transition resize-none"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-accentRed hover:bg-red-600 text-white font-mono font-bold text-xs uppercase py-3.5 rounded-lg transition-all duration-300 shadow-[0_0_25px_rgba(255,46,46,0.3)] hover:shadow-[0_0_35px_rgba(255,46,46,0.5)] flex items-center justify-center gap-2">
+                            <span>EXECUTE TRANSMISSION</span>
+                            <span>&rarr;</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="pt-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4 font-mono text-xs text-zinc-500">
+            <div class="flex flex-wrap items-center gap-4">
+                <p>© 2026 Mohamed El Farh. Built in Nador, Morocco.</p>
+                <span class="hidden md:inline text-zinc-800">|</span>
+                <span class="text-zinc-600 text-[11px]">Designed with Cyberpunk Aesthetic & Three.js</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-xs">
+                <a href="mailto:mohamedlfarh7@gmail.com" class="hover:text-accentRed transition-colors">EMAIL</a>
+                <a href="https://github.com/mohamedlfarh7-svg" target="_blank" class="hover:text-accentRed transition-colors">GITHUB</a>
+                <a href="https://www.linkedin.com/in/mohamed-el-farh-749a71378/" target="_blank" class="hover:text-accentRed transition-colors">LINKEDIN</a>
+            </div>
+        </div>
+
     </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-        }
-    });
-}, { threshold: 0.15 });
+    function updateClock() {
+        const now = new Date();
+        const utcStr = now.toUTCString().split(' ')[4] + ' UTC';
+        const clockEl = document.getElementById('utc-clock');
+        if(clockEl) clockEl.innerText = utcStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    // 2. INTERACTIVE MINI CLI WITH NADOR COMMANDS
+    const cliInput = document.getElementById('cli-input');
+    const cliOutput = document.getElementById('cli-output');
+    if(cliInput && cliOutput) {
+        cliInput.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') {
+                const cmd = cliInput.value.trim().toLowerCase();
+                cliInput.value = '';
+                const line = document.createElement('p');
+                
+                if(cmd === 'help') {
+                    line.innerText = '> Commands: nador, stack, contact, github, linkedin, clear';
+                    line.className = 'text-zinc-300';
+                } else if(cmd === 'nador') {
+                    line.innerText = '> Location: Nador, Oriental Region, Morocco (35.1681° N, 2.9335° W)';
+                    line.className = 'text-emerald-400';
+                } else if(cmd === 'stack') {
+                    line.innerText = '> Core: Laravel, Node.js, Express, React, MySQL, MongoDB, Docker';
+                    line.className = 'text-zinc-300';
+                } else if(cmd === 'contact') {
+                    line.innerText = '> Email: mohamedlfarh7@gmail.com';
+                    line.className = 'text-accentRed';
+                } else if(cmd === 'github') {
+                    window.open('https://github.com/mohamedlfarh7-svg', '_blank');
+                    line.innerText = '> Opening GitHub...';
+                    line.className = 'text-green-400';
+                } else if(cmd === 'linkedin') {
+                    window.open('https://www.linkedin.com/in/mohamed-el-farh-749a71378/', '_blank');
+                    line.innerText = '> Opening LinkedIn...';
+                    line.className = 'text-green-400';
+                } else if(cmd === 'clear') {
+                    cliOutput.innerHTML = '';
+                    return;
+                } else {
+                    line.innerText = `> Command not recognized: '${cmd}'. Type 'help'.`;
+                    line.className = 'text-red-400';
+                }
+                cliOutput.appendChild(line);
+                cliOutput.scrollTop = cliOutput.scrollHeight;
+            }
+        });
+    }
+    const footerContainer = document.getElementById('contact');
+    const footerCanvas = document.getElementById('footer-3d-canvas');
+    
+    if(footerCanvas && footerContainer) {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, footerContainer.clientWidth / footerContainer.clientHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: footerCanvas, alpha: true, antialias: true });
+        renderer.setSize(footerContainer.clientWidth, footerContainer.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        const sphereGeo = new THREE.IcosahedronGeometry(3.2, 4);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: 0xff2e2e, wireframe: true, transparent: true, opacity: 0.14 });
+        const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+        scene.add(sphereMesh);
+        const particleCount = 250;
+        const posArray = new Float32Array(particleCount * 3);
+        for(let i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 14;
+        }
+        const particleGeo = new THREE.BufferGeometry();
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMat = new THREE.PointsMaterial({ size: 0.025, color: 0xff2e2e, transparent: true, opacity: 0.55 });
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
+
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
+        });
+
+        function animateFooter3D() {
+            requestAnimationFrame(animateFooter3D);
+            sphereMesh.rotation.x += 0.002;
+            sphereMesh.rotation.y += 0.003;
+            
+            particles.rotation.y -= 0.001;
+
+            sphereMesh.rotation.y += (mouseX - sphereMesh.rotation.y) * 0.05;
+            sphereMesh.rotation.x += (mouseY - sphereMesh.rotation.x) * 0.05;
+
+            renderer.render(scene, camera);
+        }
+        animateFooter3D();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = footerContainer.clientWidth / footerContainer.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(footerContainer.clientWidth, footerContainer.clientHeight);
+        });
+    }
 </script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 25;
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+        const geometry = new THREE.TorusKnotGeometry(8, 2, 120, 16);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0xff2e2e,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.15
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const count = 300;
+        const positions = new Float32Array(count * 3);
+
+        for (let i = 0; i < count * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 100;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.25,
+            color: 0xff2e2e,
+            transparent: true,
+            opacity: 0.35
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Interactivité au Scroll & Souris
+        let targetX = 0;
+        let targetY = 0;
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            targetX = scrollY * 0.0015;
+            targetY = scrollY * 0.0025;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            const mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            const mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
+            particlesMesh.rotation.x = mouseY;
+            particlesMesh.rotation.y = mouseX;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            mesh.rotation.x += 0.004;
+            mesh.rotation.y += 0.006;
+
+            mesh.rotation.x += (targetX - mesh.rotation.x) * 0.02;
+            mesh.rotation.y += (targetY - mesh.rotation.y) * 0.02;
+
+            particlesMesh.rotation.z += 0.0005;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    document.querySelectorAll('.card-3d-canvas').forEach(canvas => {
+        const shapeType = canvas.getAttribute('data-shape');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+        camera.position.z = 3.5;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(80, 80);
+
+        let geometry;
+        if(shapeType === 'cube') geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+        else if(shapeType === 'octahedron') geometry = new THREE.OctahedronGeometry(1.3);
+        else if(shapeType === 'torus') geometry = new THREE.TorusGeometry(1, 0.4, 8, 16);
+        else geometry = new THREE.TetrahedronGeometry(1.4);
+
+        const material = new THREE.MeshBasicMaterial({ color: 0xff2e2e, wireframe: true });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        function animateCard() {
+            requestAnimationFrame(animateCard);
+            mesh.rotation.x += 0.01;
+            mesh.rotation.y += 0.015;
+            renderer.render(scene, camera);
+        }
+        animateCard();
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    document.querySelectorAll('.split-card-3d-canvas').forEach(canvas => {
+        const shapeType = canvas.getAttribute('data-shape');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+        camera.position.z = 3.5;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(120, 120);
+
+        let geometry;
+        if(shapeType === 'torusKnot') {
+            geometry = new THREE.TorusKnotGeometry(0.8, 0.2, 80, 12);
+        } else {
+            geometry = new THREE.IcosahedronGeometry(1.2, 1);
+        }
+
+        const material = new THREE.MeshBasicMaterial({ 
+            color: 0xff2e2e, 
+            wireframe: true,
+            transparent: true,
+            opacity: 0.8
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        function animateSplitShape() {
+            requestAnimationFrame(animateSplitShape);
+            mesh.rotation.x += 0.007;
+            mesh.rotation.y += 0.012;
+            renderer.render(scene, camera);
+        }
+        animateSplitShape();
+    });
+</script>
+<style>
+    @keyframes marquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+
+    @keyframes marquee-reverse {
+        0% { transform: translateX(-50%); }
+        100% { transform: translateX(0%); }
+    }
+
+    .animate-marquee {
+        display: flex;
+        width: max-content;
+        animation: marquee 35s linear infinite;
+    }
+
+    .animate-marquee-reverse {
+        display: flex;
+        width: max-content;
+        animation: marquee-reverse 35s linear infinite;
+    }
+
+    .marquee-container:hover .animate-marquee,
+    .marquee-container:hover .animate-marquee-reverse {
+        animation-play-state: paused;
+    }
+
+    .mask-gradient {
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+</style>
+
+<style>
+    @keyframes marquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+
+    .animate-marquee {
+        display: flex;
+        width: max-content;
+        animation: marquee 35s linear infinite;
+    }
+
+    .marquee-container:hover .animate-marquee {
+        animation-play-state: paused;
+    }
+
+    .mask-gradient {
+        mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .perspective-container {
+        perspective: 800px;
+    }
+
+    .project-3d-card {
+        transform-style: preserve-3d;
+        transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .project-3d-card:hover .project-3d-img {
+        transform: scale(1.05);
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.project-3d-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -12;
+            const rotateY = ((x - centerX) / centerX) * 12;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateX(0deg) rotateY(0deg) translateZ(0px)`;
+        });
+    });
+</script>
+</script>
+<style>
+    .perspective-stage {
+        perspective: 1600px;
+    }
+
+    .carousel-3d-ring {
+        position: relative;
+        width: 440px; 
+        height: 340px; 
+        transform-style: preserve-3d;
+        transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .carousel-3d-card {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        backface-visibility: hidden;
+        transition: border-color 0.4s ease, opacity 0.5s ease;
+    }
+
+    .carousel-3d-card:hover {
+        border-color: rgba(255, 46, 46, 0.9) !important;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    const reviewsCanvas = document.getElementById('reviews-3d-bg');
+    if (reviewsCanvas) {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 6;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: reviewsCanvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        const geo = new THREE.TorusGeometry(4, 1.2, 16, 100);
+        const mat = new THREE.MeshBasicMaterial({ color: 0xff2e2e, wireframe: true, transparent: true, opacity: 0.12 });
+        const torus = new THREE.Mesh(geo, mat);
+        scene.add(torus);
+        const particleCount = 200;
+        const posArray = new Float32Array(particleCount * 3);
+        for(let i = 0; i < particleCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15;
+        }
+        const particleGeo = new THREE.BufferGeometry();
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particleMat = new THREE.PointsMaterial({ size: 0.03, color: 0xff2e2e, transparent: true, opacity: 0.4 });
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
+
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+        });
+
+        function animateBg3D() {
+            requestAnimationFrame(animateBg3D);
+            torus.rotation.x += 0.0015;
+            torus.rotation.y += 0.0025;
+            particles.rotation.y -= 0.0008;
+
+            torus.rotation.y += (mouseX - torus.rotation.y) * 0.03;
+            torus.rotation.x += (mouseY - torus.rotation.x) * 0.03;
+
+            renderer.render(scene, camera);
+        }
+        animateBg3D();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    }
+    const ring = document.getElementById('circle-carousel');
+    const cards = document.querySelectorAll('.carousel-3d-card');
+    const totalCards = cards.length;
+    const angleStep = 360 / totalCards;
+    const radius = 480; 
+
+    let currentAngle = 0;
+
+    cards.forEach((card, index) => {
+        const cardAngle = index * angleStep;
+        card.style.transform = `rotateY(${cardAngle}deg) translateZ(${radius}px)`;
+    });
+
+    function rotateRing(direction) {
+        currentAngle += direction * angleStep;
+        ring.style.transform = `translateZ(-${radius}px) rotateY(${-currentAngle}deg)`;
+    }
+
+    document.getElementById('prev-3d').addEventListener('click', () => rotateRing(-1));
+    document.getElementById('next-3d').addEventListener('click', () => rotateRing(1));
+    const stage = document.querySelector('.perspective-stage');
+    stage.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY > 0) {
+            rotateRing(1);
+        } else {
+            rotateRing(-1);
+        }
+    }, { passive: false });
+    let startX = 0;
+    let isDragging = false;
+
+    stage.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        if (Math.abs(deltaX) > 50) {
+            rotateRing(deltaX > 0 ? -1 : 1);
+            startX = e.clientX;
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+</script>
 </body>
 </html>
